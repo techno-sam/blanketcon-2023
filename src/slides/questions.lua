@@ -1,4 +1,5 @@
-local x, y, z = -449, 67, 398
+local config = require "config"
+local x, y, z = config.question_input_pos.x, config.question_input_pos.y, config.question_input_pos.z
 
 local questions, dirty = {}, false
 

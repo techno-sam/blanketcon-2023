@@ -1,8 +1,9 @@
+local config = require "config"
 local pretty = require "cc.pretty"
 local button = require "button"
 local wrap = require "cc.strings".wrap
 
-local CHANNEL = 16459
+local CHANNEL = config.remote_control_channel
 local modem = peripheral.find("modem")
 modem.open(CHANNEL)
 modem.transmit(CHANNEL, CHANNEL, { action = "sync_remote" })

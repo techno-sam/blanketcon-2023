@@ -1,10 +1,11 @@
+local config = require "config"
 local pretty = require "cc.pretty"
 local button = require "button"
 local questions = require "questions"
 local wrap = require "cc.strings".wrap
 local loader = require "loader"
 
-local CHANNEL = 16459
+local CHANNEL = config.remote_control_channel
 local modem = peripheral.find("modem", function(_, x) return x.isWireless() end)
 modem.open(CHANNEL)
 
@@ -12,7 +13,7 @@ local function to_json(tbl)
     return ("%q"):format(textutils.serializeJSON(tbl))
 end
 
-local logo = {url="https://blanketcon.b-cdn.net/pub/23/8219_logo.png", width=1080, height=379}
+local logo = config.logo
 
 local function create_display(
     x, y, z,
@@ -100,13 +101,13 @@ local function go_next() if image < #images then image = image + 1 dirty = true 
 local function go_prev() if image > 1 then image = image - 1 dirty = true end end
 local function run_slide_cmd() run_cmd = true end
 
-local display_monitor = peripheral.wrap("monitor_1")
+local display_monitor = peripheral.wrap("monitor_"..config.monitors.display)
 display_monitor.setTextScale(5)
 
 local display_width = display_monitor.getSize()
 
 local backstage_monitors = {}
-for _, monitor in pairs({ "monitor_2", "monitor_3", "monitor_4" }) do
+for _, monitor in pairs({ "monitor_"..config.monitors.backstage_a, "monitor_"..config.monitors.backstage_b, "monitor_"..config.monitors.backstage_c }) do
     local backstage_monitor = peripheral.wrap(monitor)
     backstage_monitor.setTextScale(0.5)
     backstage_monitors[monitor] = backstage_monitor
@@ -122,7 +123,7 @@ local backstage_buttons = {
     end },
     run_cmd = {x = 20, y = 6, text = "Run Command(s)", bg=colours.purple, touch = run_slide_cmd},
 }
-local backstage_width = backstage_monitors.monitor_2.getSize()
+local backstage_width = backstage_monitors[config.monitors.backstage_a].getSize()
 
 local function dismiss_q(self)
     self._question.visible = false

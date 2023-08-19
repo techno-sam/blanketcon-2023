@@ -1,3 +1,5 @@
+local config = require "config"
+
 local sounds = {
     {
         name   = "Joy of Remembrance",
@@ -76,10 +78,10 @@ if ... == "viewer" then
     end
 end
 
-local album_art = peripheral.wrap("monitor_13")
-local now_playing = peripheral.wrap("monitor_14")
-local speaker = peripheral.wrap("speaker_1")
-local speaker2 = peripheral.wrap("speaker_2")
+local album_art = peripheral.wrap("monitor_"..config.monitors.album_art)
+local now_playing = peripheral.wrap("monitor_"..config.monitors.now_playing)
+local speaker = peripheral.wrap("speaker_"..config.speakers.a)
+local speaker2 = peripheral.wrap("speaker_"..config.speakers.b)
 
 album_art.setTextScale(0.5)
 

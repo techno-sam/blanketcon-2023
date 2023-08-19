@@ -1,4 +1,5 @@
-local api_key = require "api_key"
+local config = require "config"
+local api_key = config.enable_imgur and (require "api_key") or ""
 
 local function format_image(image)
     local description = image.description
@@ -38,7 +39,7 @@ end
 
 return function(name)
     local album = name:match("^https://imgur.com/a/(.+)")
-    if album then return load_album(album) end
+    if config.enable_imgur and album then return load_album(album) end
 
     if name:sub(1, 8) == "https://" or name:sub(1, 7) == "http://" then
         local handle = assert(http.get(name))
