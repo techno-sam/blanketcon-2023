@@ -12,9 +12,11 @@ local function to_json(tbl)
     return ("%q"):format(textutils.serializeJSON(tbl))
 end
 
+local logo = {url="https://blanketcon.b-cdn.net/pub/23/8219_logo.png", width=1080, height=379}
+
 local function create_display(
     x, y, z,
-    display_x, display_y, display_z, side_z,
+    display_x, display_y, display_z, side_x,
     t_width, t_height
 )
     local current_image = false
@@ -24,11 +26,11 @@ local function create_display(
         current_image = image
 
         if not image then
-            commands.async.data.modify.block(x, y, z, "Text1", "set", "value", to_json { text = "" })
+            commands.async.data.modify("block", x, y, z, "front_text.messages[0]", "set", "value", to_json { text = "" })
             return
         end
 
-        commands.async.data.modify.block(x, y, z, "Text1", "set", "value", to_json {
+        commands.async.data.modify("block", x, y, z, "front_text.messages[0]", "set", "value", to_json {
             text = ("!PS:%s"):format(image.url)
         })
 
@@ -38,9 +40,9 @@ local function create_display(
         width = scale * width
         height = scale * height
 
-        local dx, dy, dz = display_x - x, display_y - y - height / 2, display_z - z + width * side_z / 2
+        local dx, dy, dz = display_x - x + width * side_x / 2, display_y - y - height / 2, display_z - z
 
-        commands.async.data.modify.block(x, y, z, "Text4", "set", "value", to_json {
+        commands.async.data.modify("block", x, y, z, "front_text.messages[3]", "set", "value", to_json {
             text = ("%s:%s:%s:%s:%s"):format(width, height, dx, dy, dz)
         })
     end
@@ -52,46 +54,59 @@ print(("%s has %d images"):format(file, #images))
 
 local margin = 2/16
 local display_image = create_display(
-    -67, 72, -192,
-    -67.98, 77, -191.5, 1,
-    7 - margin * 2, 6 - margin * 2
+    -453, 67, 395,
+    -449.0, 76.0, 394.0005, -1,
+    10 - margin * 2, 6 - margin * 2
 )
 
 local prev_slide_l = create_display(
-    -69, 71, -196,
-    -63.5, 74.5, -197.5, -1,
+    -440, 67, 398,
+    -440.53125, 71.5625, 398.98, 1,
     0.8, 0.8
 )
 
 local next_slide_l = create_display(
-    -69, 71, -194,
-    -63.5, 74.5, -195.5, -1,
+    -441, 67, 398,
+    -441.46875, 71.5625, 398.98, 1,
     0.8, 0.8
 )
 
 local prev_slide_r = create_display(
-    -69, 71, -190,
-    -63.5, 74.5, -187.5, -1,
+    -458, 67, 398,
+    -458.53125, 71.5625, 398.98, 1,
     0.8, 0.8
 )
 
 local next_slide_r = create_display(
-    -69, 71, -189,
-    -63.5, 74.5, -185.5, -1,
+    -459, 67, 398,
+    -459.46875, 71.5625, 398.98, 1,
     0.8, 0.8
 )
 
-local image, blank, dirty = 1, false, true
+local prev_slide_b = create_display(
+    -443, 67, 393,
+    -443.53125, 72.5625, 393.98, 1,
+    0.8, 0.8
+)
+
+local next_slide_b = create_display(
+    -444, 67, 393,
+    -444.46875, 72.5625, 393.98, 1,
+    0.8, 0.8
+)
+
+local image, blank, dirty, run_cmd = 1, false, true, false
 local function go_next() if image < #images then image = image + 1 dirty = true end end
 local function go_prev() if image > 1 then image = image - 1 dirty = true end end
+local function run_slide_cmd() run_cmd = true end
 
-local display_monitor = peripheral.wrap("monitor_11")
+local display_monitor = peripheral.wrap("monitor_1")
 display_monitor.setTextScale(5)
 
 local display_width = display_monitor.getSize()
 
 local backstage_monitors = {}
-for _, monitor in pairs({ "monitor_10", "monitor_12", "monitor_13" }) do
+for _, monitor in pairs({ "monitor_2", "monitor_3", "monitor_4" }) do
     local backstage_monitor = peripheral.wrap(monitor)
     backstage_monitor.setTextScale(0.5)
     backstage_monitors[monitor] = backstage_monitor
@@ -99,14 +114,15 @@ end
 
 local backstage_image = false
 local backstage_buttons = {
-    next = { x =  2, y = 3, text = "Prev Slide", touch = go_prev },
-    prev = { x = 46, y = 3, text = "Next Slide", touch = go_next },
-    clear = { x = 24, y = 3, text = "Clear Slide", bg = colours.red, touch = function(self)
+    next = { x =  2, y = 9, text = "Prev Slide", touch = go_prev },
+    prev = { x = 24, y = 9, text = "Next Slide", touch = go_next },
+    clear = { x = 2, y = 6, text = "Clear Slide", bg = colours.red, touch = function(self)
         blank = not blank
         dirty = true
     end },
+    run_cmd = {x = 20, y = 6, text = "Run Command(s)", bg=colours.purple, touch = run_slide_cmd},
 }
-local backstage_width = backstage_monitors.monitor_10.getSize()
+local backstage_width = backstage_monitors.monitor_2.getSize()
 
 local function dismiss_q(self)
     self._question.visible = false
@@ -143,11 +159,19 @@ local function sync_remote(slide, next_slide)
     })
 end
 
+local function draw_box(x, y, w, h, color)
+    for i = 0, h do
+        term.setBackgroundColour(color)
+        term.setCursorPos(x, y + i)
+        term.write(string.rep(" ", w))
+    end
+end
+
 local function tick()
     local slide, next_slide, prev_slide = images[image], images[image + 1], images[image - 1]
     if blank then display_image(nil) else display_image(slide) end
-    prev_slide_l(prev_slide) prev_slide_r(prev_slide)
-    next_slide_l(next_slide) next_slide_r(next_slide)
+    prev_slide_l(prev_slide) prev_slide_r(prev_slide) prev_slide_b(prev_slide)
+    next_slide_l(next_slide) next_slide_r(next_slide) next_slide_b(next_slide)
 
     if dirty or questions.poll_dirty() then
         dirty = false
@@ -166,7 +190,7 @@ local function tick()
 
             local y, i = 6, 0
             local function start_line() term.setCursorPos(2, y) term.clearLine() y = y + 1 end
-            for _, question in pairs(questions.questions) do
+            --[[for _, question in pairs(questions.questions) do
                 if question.visible then
                     i = i + 1
                     local bg = i % 2 == 0 and colours.lightGrey or colours.white
@@ -188,7 +212,7 @@ local function tick()
                     start_line()
                     if #wrapped <= 1 then start_line() end
                 end
-            end
+            end]]
             term.setBackgroundColour(colours.white)
 
             term.setCursorPos(1, 1)
@@ -197,6 +221,9 @@ local function tick()
                 pretty.space_line ..
                 pretty.text("   Next Slide: ", colours.lightGrey) .. pretty.text(next_slide and (next_slide.desc or next_slide.url) or "")
             )
+            draw_box(0, 13, backstage_width+1, 11, colours.black)
+            draw_box(0, 12, backstage_width+1, 0, colours.grey)
+            draw_box(18, 13, 2, 11, colours.grey)
             term.redirect(old)
 
             button.draw(backstage_buttons, backstage_monitor)
@@ -210,9 +237,17 @@ local function tick()
         sync_remote(slide, next_slide)
     end
 
+    if run_cmd then
+        run_cmd = false
+        for _, command in pairs(slide.commands) do
+            print("Running " .. command)
+            commands.execAsync(command)
+        end
+    end
+
     local event, arg1, arg2, arg3, arg4, arg5 = os.pullEvent()
     if event == "redstone" then
-        local mask = redstone.getBundledInput("back")
+        local mask = redstone.getBundledInput("left")
         if colours.test(mask, colours.white) or colours.test(mask, colours.magenta) then go_next()
         elseif colours.test(mask, colours.lightBlue) or colours.test(mask, colours.orange) then go_prev()
         elseif colours.test(mask, colours.yellow) or colours.test(mask, colours.lime) then
@@ -220,6 +255,12 @@ local function tick()
                 print("Running " .. command)
                 commands.execAsync(command)
             end
+        elseif not colours.test(mask, colours.brown) then
+            print("quitting slides")
+            prev_slide_l(nil) prev_slide_r(nil) prev_slide_b(nil)
+            next_slide_l(nil) next_slide_r(nil) next_slide_b(nil)
+            display_image(logo)
+            return true
         end
     elseif event == "key" and arg1 == keys.right then go_next()
     elseif event == "key" and arg1 == keys.left then go_prev()

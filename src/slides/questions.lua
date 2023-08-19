@@ -1,4 +1,4 @@
-local x, y, z = -65, 70, -196
+local x, y, z = -449, 67, 398
 
 local questions, dirty = {}, false
 

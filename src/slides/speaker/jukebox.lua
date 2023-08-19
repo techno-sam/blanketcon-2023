@@ -30,13 +30,6 @@ local sounds = {
         url    = "https://squiddev.cc/r/sound/yuru.dfpwm",
     },
     {
-        name   = "Nvr Gnna Give U Up",
-        artist = "Rick Rick",
-        art    = "art/never.lua",
-        url    = "https://squiddev.cc/r/sound/never.dfpwm",
-        volume = 3, -- <3
-    },
-    {
         name   = "Diggy Diggy Hole",
         artist = "WIND ROSE",
         art    = "art/diggy.lua",
@@ -83,9 +76,10 @@ if ... == "viewer" then
     end
 end
 
-local album_art = peripheral.wrap("right")
-local now_playing = peripheral.wrap("bottom")
-local speaker = peripheral.find("speaker")
+local album_art = peripheral.wrap("monitor_13")
+local now_playing = peripheral.wrap("monitor_14")
+local speaker = peripheral.wrap("speaker_1")
+local speaker2 = peripheral.wrap("speaker_2")
 
 album_art.setTextScale(0.5)
 
@@ -118,7 +112,12 @@ while true do
         now_playing.write(sound.artist)
 
         album_art.setCursorPos(1, 1)
-        dofile(sound.art).draw(album_art)
+        local old_set_palette_color = album_art.setPaletteColor
+        album_art.setPaletteColor = function(c, packed)
+            local r, g, b = colors.unpackRGB(packed)
+            old_set_palette_color(c, r, g, b)
+        end
+        dofile("speaker/"..sound.art).draw(album_art)
 
         local handle, err = http.get { url = sound.url, binary = true }
         if not handle then
@@ -130,9 +129,14 @@ while true do
                 if not chunk then break end
 
                 local buffer = decoder(chunk)
-                while not speaker.playAudio(buffer, sound.volume or 2) do
-                    os.pullEvent("speaker_audio_empty")
+                local function make_player(speak)
+                    return function()
+                        while not speak.playAudio(buffer, sound.volum or 2) do
+                            os.pullEvent("speaker_audio_empty")
+                        end
+                    end
                 end
+                parallel.waitForAll(make_player(speaker), make_player(speaker2))
             end
         end
 

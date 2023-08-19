@@ -1,11 +1,57 @@
 print("Behold, my terrible wiring!")
 
+local function waitForPower()
+    while true do
+        local event, arg1, arg2, arg3, arg4, arg5 = os.pullEvent()
+        if event == "redstone" then
+            local mask = redstone.getBundledInput("left")
+            if colours.test(mask, colours.brown) then
+                local speaker = peripheral.wrap("speaker_1")
+                local speaker2 = peripheral.wrap("speaker_2")
+                speaker.stop()
+                speaker2.stop()
+                return true
+            end
+        end
+    end
+end
+
+local function runBGM()
+    shell.run("/speaker/jukebox")
+end
+
+local function clearAllMonitors()
+    local monitors = {peripheral.find("monitor")}
+    for _, monitor in pairs(monitors) do
+        monitor.setBackgroundColour(colours.black)
+        monitor.clear()
+    end
+end
+
 if pocket then
     shell.run("/slide-control")
 else
     term.setTextColour(colours.green)
-    print("Run `/slides [IMGUR ALBUM]' to start a slideshow")
+    print("Automatic slide management system")
     term.setTextColour(colours.white)
 
-    os.queueEvent("paste", "/slides https://imgur.com/a/38KMRGa")
+    --os.queueEvent("paste", "/slides https://imgur.com/a/38KMRGa")
+    while true do
+        local mask = redstone.getBundledInput("left")
+        if colours.test(mask, colours.brown) then
+            print("Item found")
+            local info = commands.getBlockInfo(-446, 72, 393).nbt
+            if info~=nil and info.HeldItem~=nil and info.HeldItem.Item~=nil and info.HeldItem.Item.tag~=nil and info.HeldItem.Item.tag.pages~=nil and info.HeldItem.Item.tag.pages[0] ~= nil then
+                local text = info.HeldItem.Item.tag.pages[0]
+                print("Running slides")
+                print("/slides "..text)
+                clearAllMonitors()
+                shell.run("/slides "..text)
+            end
+        else
+            print("Running BGM")
+            clearAllMonitors()
+            parallel.waitForAny(waitForPower, runBGM)
+        end
+    end
 end

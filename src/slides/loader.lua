@@ -1,3 +1,5 @@
+local api_key = require "api_key"
+
 local function format_image(image)
     local description = image.description
     local commands = {}
@@ -22,7 +24,7 @@ end
 
 local function load_album(album)
     local response = assert(http.get('https://api.imgur.com/3/album/' .. album .. '/images', {
-        Authorization = "Client-ID REDACTED"
+        Authorization = "Client-ID "..api_key
     }))
 
     local contents = textutils.unserialiseJSON(response.readAll())
