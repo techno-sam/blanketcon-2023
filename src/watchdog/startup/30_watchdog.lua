@@ -5,8 +5,6 @@ end
 
 parallel.waitForAll(function()
     while true do
-        -- Kill any quarry experience orbs
-        check_command(commands.kill("@e[type=minecraft:experience_orb,x=-17,y=40,z=336,dx=8,dy=30,dz=8]"))
 
         -- Turn on all computers
         -- 22: GPS
@@ -19,13 +17,5 @@ parallel.waitForAll(function()
         check_command(commands.computercraft("turn-on #22 #26 #28 #30 #31 #32"))
 
         sleep(30)
-    end
-end, function()
-    peripheral.find("modem", rednet.open)
-
-    while true do
-        rednet.receive("squid/quarry-restock")
-        print("Refilling the quarry")
-        shell.run("/refill")
     end
 end)
