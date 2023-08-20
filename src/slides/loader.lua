@@ -77,4 +77,6 @@ return function(name)
         end
         slide.commands = commands
     end
+
+    return loaded
 end

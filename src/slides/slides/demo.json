@@ -5,7 +5,7 @@
         "height": 147,
         "desc": "Epic slide 1",
         "commands": {
-            "/tellraw @a[distance=0..50] \"[Slides system] This is a testing message\"": "NxfuLdTR5c4rMh4KIu78ZcDsW/E="
+            "/tellraw @a \"[Slides system] This is a testing message\"": "GJIX6yzlV8nm4F1RyZvsW+aBj6U="
         }
     },
     {
@@ -14,7 +14,7 @@
         "height": 121,
         "desc": "Awesome slide 2",
         "commands": {
-            "/tellraw @a[distance=0..50] \"[Slides system] This is a testing message (wrong HMAC)\"": "NxfuLdTR5c4rMh4KIu78ZcDsW/E="
+            "/tellraw @a \"[Slides system] This is a testing message (wrong HMAC)\"": "NxfuLdTR5c4rMh4KIu78ZcDsW/E="
         }
     },
     {
@@ -23,7 +23,7 @@
         "height": 343,
         "desc": "1337 slide 3",
         "commands": [
-            "/tellraw @a[distance=0..50] \"[Slides system] This is a testing message (no HMAC)\""
+            "/tellraw @a \"[Slides system] This is a testing message (no HMAC)\""
         ]
     },
     {
@@ -32,7 +32,7 @@
         "height": 229,
         "desc": "Fantastic slide 4",
         "commands": {
-            "/tellraw @a[distance=0..50] \"[Slides system] This is another correct testing message\"": "fnr8z3SSAYQ8qUUHc7rezfh3GQM="
+            "/tellraw @a \"[Slides system] This is another correct testing message\"": "r7gIZA26qkHVIvwpk4dNUjqUykU="
         }
     }
 ]
