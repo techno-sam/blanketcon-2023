@@ -224,6 +224,7 @@ while true do
         end--]]
         local x1, y1, z1 = config.jukebox_input_pos.x, config.jukebox_input_pos.y, config.jukebox_input_pos.z
         sound.art.Count = 1
+        sound.art.Slot = 1
         local ser, _ = string.gsub(textutils.serializeJSON(sound.art), '"Count"\s*:\s*1', '"Count":1b') -- yes this is really correct
         print("Inserting:")
         print(ser)
