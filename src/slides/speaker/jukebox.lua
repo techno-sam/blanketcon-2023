@@ -67,12 +67,26 @@ local sounds = {
     {
         name = "Pigstep",
         artist = "Lena Raine",
-        art = "art/celeste.lua", -- placeholder
+        art = {id="minecraft:music_disc_pigstep", Count=1}, -- placeholder
         sound_event = "music_disc.pigstep", -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
-        duration = 2*60 + 28
+        duration = 2*60 + 28 -- https://minecraft.fandom.com/wiki/Music_Disc#Discs
+    },
+    {
+        name = "Otherside",
+        artist = "Lena Raine",
+        art = {id="minecraft:music_disc_otherside", Count=1},
+        sound_event = "music_disc.otherside", -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
+        duration = 3*60 + 15 -- https://minecraft.fandom.com/wiki/Music_Disc#Discs
+    },
+    {
+        name = "Papillons",
+        artist = "xyce & malmen",
+        art = {id="yttr:music_disc_papillons", Count=1}, -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
+        sound_event = "yttr:papillons",
+        duration = 3*60 + 39
     }
 }
-
+--[[
 if ... == "viewer" then
     local i = 1
     local arts = {}
@@ -86,7 +100,7 @@ if ... == "viewer" then
         elseif key == keys.left then i = ((i - 2) % #arts) + 1
         end
     end
-end
+end--]]
 
 local album_art = peripheral.wrap("monitor_"..config.monitors.album_art)
 local now_playing = peripheral.wrap("monitor_"..config.monitors.now_playing)
@@ -98,6 +112,10 @@ album_art.setTextScale(0.5)
 
 now_playing.setTextScale(1)
 now_playing.setBackgroundColour(colours.white)
+
+local function to_json(tbl)
+    return ("%q"):format(textutils.serializeJSON(tbl))
+end
 
 while true do
     -- Lazy shuffle here so we don't play the same songs in order.
@@ -130,7 +148,8 @@ while true do
             local r, g, b = colors.unpackRGB(packed)
             old_set_palette_color(c, r, g, b)
         end
-        dofile("speaker/"..sound.art).draw(album_art)
+        commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item", "set", "value", to_json(sound.art)) -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
+        --dofile("speaker/"..sound.art).draw(album_art)
 
         --[[local handle, err = http.get { url = sound.url, binary = true }
         if not handle then
@@ -162,7 +181,6 @@ while true do
         end--]]
 
         if #speakers >= 1 then
-            local players = {}
             for _, speaker in pairs(speakers) do
                 speaker.playSound(sound.sound_event)
             end

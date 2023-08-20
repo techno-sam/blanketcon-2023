@@ -13,8 +13,9 @@ if false then -- local testing
             album_art = 13,
             now_playing = 14
         },
-        enable_commands = true,
-        command_secret = "totally_secret" -- DO NOT LEAK THIS, used for verifying commands
+        enable_commands = false,
+        command_secret = "totally_secret", -- DO NOT LEAK THIS, used for verifying commands
+        spindle_discs = {x=-449, y=72, z=393}
     }
 else
     return {
@@ -31,7 +32,8 @@ else
             album_art = 13,
             now_playing = 14
         },
-        enable_commands = true,
-        command_secret = "totally_secret" -- DO NOT LEAK THIS, used for verifying commands
+        enable_commands = false,
+        command_secret = "totally_secret", -- DO NOT LEAK THIS, used for verifying commands
+        spindle_discs = {x=-449, y=72, z=393}
     }
 end
