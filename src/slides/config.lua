@@ -13,10 +13,6 @@ if false then -- local testing
             album_art = 13,
             now_playing = 14
         },
-        speakers = {
-            a = 1,
-            b = 2
-        },
         enable_commands = true,
         command_secret = "totally_secret" -- DO NOT LEAK THIS, used for verifying commands
     }
@@ -34,10 +30,6 @@ else
 
             album_art = 13,
             now_playing = 14
-        },
-        speakers = {
-            a = 3,
-            b = 2
         },
         enable_commands = true,
         command_secret = "totally_secret" -- DO NOT LEAK THIS, used for verifying commands

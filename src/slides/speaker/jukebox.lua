@@ -80,12 +80,7 @@ end
 
 local album_art = peripheral.wrap("monitor_"..config.monitors.album_art)
 local now_playing = peripheral.wrap("monitor_"..config.monitors.now_playing)
-local speaker = peripheral.wrap("speaker_"..config.speakers.a)
-local speaker2 = peripheral.wrap("speaker_"..config.speakers.b)
-
-if speaker == nil and speaker2 == nil then
-    speaker = peripheral.find("speaker")
-end
+local speakers = {peripheral.find("speaker")}
 
 album_art.setTextScale(0.5)
 
@@ -142,12 +137,12 @@ while true do
                         end
                     end
                 end
-                if speaker ~= nil and speaker2 ~= nil then
-                    parallel.waitForAny(make_player(speaker), make_player(speaker2))
-                elseif speaker ~= nil then
-                    make_player(speaker)()
-                elseif speaker2 ~= nil then
-                    make_player(speaker2)()
+                if #speakers >= 1 then
+                    local players = {}
+                    for _, speaker in pairs(speakers) do
+                        players[#players+1] = make_player(speaker)
+                    end
+                    parallel.waitForAny(unpack(players))
                 else
                     sleep(0.05)
                 end
