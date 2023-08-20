@@ -1,1 +1,26 @@
-[{"url": "https://i.imgur.com/D1AvWW7.jpg", "width": 300, "height": 178}, {"url": "https://i.imgur.com/KcqKyOd.jpg", "width": 300, "height": 178}, {"url": "https://i.imgur.com/ApPlANb.jpg", "width": 300, "height": 178}, {"url": "https://i.imgur.com/pULmWM2.jpg", "width": 300, "height": 178}, {"url": "https://i.imgur.com/7tqefGK.jpg", "width": 300, "height": 178}]
+[
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_1.png",
+        "width": 208,
+        "height": 147,
+        "desc": "Epic slide 1"
+    },
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_2.png",
+        "width": 410,
+        "height": 121,
+        "desc": "Awesome slide 2"
+    },
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_3.png",
+        "width": 150,
+        "height": 343,
+        "desc": "1337 slide 3"
+    },
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_4.png",
+        "width": 258,
+        "height": 229,
+        "desc": "Fantastic slide 4"
+    }
+]
