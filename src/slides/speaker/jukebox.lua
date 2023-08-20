@@ -88,7 +88,7 @@ local sounds = {
 }
 
 -- get sounds from disc chest
-local x, y, z = config.spindle_discs.x, config.spindle_discs.y, config.spindle_discs.z
+local x, y, z = config.spindle_discs_pos.x, config.spindle_discs_pos.y, config.spindle_discs_pos.z
 local info = commands.getBlockInfo(x, y, z)
 for slot, item in pairs(info.nbt.Items) do
     if item.id == "spindlemark:disc" and item.tag and item.tag.SongLength and item.tag.Description and item.tag.CustomMusicDiscSound then
@@ -126,9 +126,9 @@ end--]]
 
 local album_art = peripheral.wrap("monitor_"..config.monitors.album_art)
 local now_playing = peripheral.wrap("monitor_"..config.monitors.now_playing)
-local speakers = {peripheral.find("speaker")}
+--local speakers = {peripheral.find("speaker")}
 
-print("Found "..#speakers.." speakers")
+--print("Found "..#speakers.." speakers")
 
 album_art.setTextScale(0.5)
 
@@ -179,12 +179,7 @@ while true do
         print(item_data)--]]
         commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item.id", "set", "value", "\""..sound.art.id.."\"") -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
         if sound.art.tag ~= nil then
-            local item_data = to_json(sound.art.tag)
-            local regex_match_backslash = "\\\\" -- double escaped for regex and lua
-            local regex_match_quote = "\\\"" -- double escaped for regex and lua
-            item_data = string.gsub(item_data, regex_match_backslash..regex_match_quote, "<QUOTE>")
-            item_data = string.gsub(item_data, regex_match_quote, "")
-            item_data = string.gsub(item_data, "<QUOTE>", "\"")
+            local item_data = textutils.serializeJSON(sound.art.tag)
             print(item_data)
             commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item.tag", "set", "value", item_data)
         end
@@ -219,14 +214,18 @@ while true do
             end
         end--]]
 
-        if #speakers >= 1 then
+        --[[if #speakers >= 1 then
             for _, speaker in pairs(speakers) do
                 speaker.playSound(sound.sound_event)
             end
             sleep(sound.duration)
         else
             sleep(0.05)
-        end
+        end--]]
+        local x1, y1, z1 = config.jukebox_input_pos.x, config.jukebox_input_pos.y, config.jukebox_input_pos.z
+        local ser, _ = string.gsub(textutils.serializeJSON(sound.art), '"Count"\s*:\s*1', '"Count":1b') -- yes this is really correct
+        commands.async.data.modify("block", x1, y1, z1, "Items", "append", "value", ser)
+        sleep(sound.duration)
 
         local deadline = os.epoch("utc") + 10 * 1000
         repeat sleep(1) until os.epoch("utc") >= deadline
