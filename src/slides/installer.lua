@@ -68,4 +68,4 @@ end
 
 install("/", fs_idx)
 
-::exit::
+shell.run("reboot")
