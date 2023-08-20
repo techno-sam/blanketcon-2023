@@ -101,11 +101,8 @@ for slot, item in pairs(info.nbt.Items) do
         }
         local dash_idx, _ = string.find(item.tag.Description, '-')
         if dash_idx then
-            song.name = string.sub(item.tag.Description, 1, dash_idx)
-            song.artist = string.sub(item.tag.Description, dash_idx)
-            print()
-            print(song.name)
-            print(song.artist)
+            song.name = string.sub(item.tag.Description, 1, dash_idx-2)
+            song.artist = string.sub(item.tag.Description, dash_idx+2)
         end
         sounds[#sounds+1] = song
     end
