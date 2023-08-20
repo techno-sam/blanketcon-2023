@@ -19,7 +19,13 @@ local function waitForPower()
 end
 
 local function runBGM()
-    shell.run("/speaker/jukebox")
+    local function inner()
+        shell.run("/speaker/jukebox")
+    end
+    if not pcall(inner) then
+        print("Error running BGM, sleeping for 5 seconds")
+        sleep(5)
+    end
 end
 
 local function clearAllMonitors()
@@ -51,7 +57,16 @@ else
                 print("Running slides")
                 print("/slides "..text)
                 clearAllMonitors()
-                if not shell.run("/slides "..text) then
+                local function inner()
+                    return shell.run("/slides "..text)
+                end
+                local success, results = pcall(inner)
+                if not success or not results then
+                    print("Error during slideshow, rebooting after 5 seconds")
+                    for i = 5, 0 do
+                        print(""..i.."...")
+                        sleep(1)
+                    end
                     break
                 end
             end
@@ -61,4 +76,6 @@ else
             parallel.waitForAny(waitForPower, runBGM)
         end
     end
+
+    os.reboot()
 end
