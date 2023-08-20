@@ -17,13 +17,16 @@ local function waitForPower()
 end
 
 local function runBGM()
-    shell.run("/speaker/jukebox")
+    if not shell.run("/speaker/jukebox") then
+        crash()
+    end
 end
 
 local function clearAllMonitors()
     local monitors = {peripheral.find("monitor")}
     for _, monitor in pairs(monitors) do
         monitor.setBackgroundColour(colours.black)
+        monitor.setPaletteColour(colours.black, 0, 0, 0)
         monitor.clear()
     end
 end
@@ -46,7 +49,9 @@ else
                 print("Running slides")
                 print("/slides "..text)
                 clearAllMonitors()
-                shell.run("/slides "..text)
+                if not shell.run("/slides "..text) then
+                    break
+                end
             end
         else
             print("Running BGM")

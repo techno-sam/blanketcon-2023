@@ -50,7 +50,7 @@ local function create_display(
 end
 
 local file = ... or error("slides [ALBUM]", 0)
-local images = loader(file)
+local images = loader(file) or {}
 print(("%s has %d images"):format(file, #images))
 
 local margin = 2/16
@@ -123,7 +123,7 @@ local backstage_buttons = {
     end },
     run_cmd = {x = 20, y = 6, text = "Run Command(s)", bg=colours.purple, touch = run_slide_cmd},
 }
-local backstage_width = backstage_monitors[config.monitors.backstage_a].getSize()
+local backstage_width = backstage_monitors["monitor_"..config.monitors.backstage_a].getSize()
 
 local function dismiss_q(self)
     self._question.visible = false
@@ -265,7 +265,9 @@ local function tick()
         end
     elseif event == "key" and arg1 == keys.right then go_next()
     elseif event == "key" and arg1 == keys.left then go_prev()
-    elseif event == "key" and arg1 == keys.backspace then return true
+    elseif event == "key" and arg1 == keys.backspace then
+        print("Exit key received")
+        return true
     elseif event == "monitor_touch" and backstage_monitors[arg1] then
         button.touch(backstage_buttons, arg2, arg3)
     elseif event == "modem_message" and arg2 == CHANNEL and arg5 <= 64 then
