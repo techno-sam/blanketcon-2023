@@ -83,6 +83,10 @@ local now_playing = peripheral.wrap("monitor_"..config.monitors.now_playing)
 local speaker = peripheral.wrap("speaker_"..config.speakers.a)
 local speaker2 = peripheral.wrap("speaker_"..config.speakers.b)
 
+if speaker == nil and speaker2 == nil then
+    speaker = peripheral.find("speaker")
+end
+
 album_art.setTextScale(0.5)
 
 now_playing.setTextScale(1)
@@ -132,17 +136,21 @@ while true do
 
                 local buffer = decoder(chunk)
                 local function make_player(speak)
-                    if speak == nil then
-                        return function() end
-                    else
-                        return function()
-                            while not speak.playAudio(buffer, sound.volume or 2) do
-                                os.pullEvent("speaker_audio_empty")
-                            end
+                    return function()
+                        while not speak.playAudio(buffer, sound.volume or 2) do
+                            os.pullEvent("speaker_audio_empty")
                         end
                     end
                 end
-                parallel.waitForAny(make_player(speaker), make_player(speaker2))
+                if speaker ~= nil and speaker2 ~= nil then
+                    parallel.waitForAny(make_player(speaker), make_player(speaker2))
+                elseif speaker ~= nil then
+                    make_player(speaker)()
+                elseif speaker2 ~= nil then
+                    make_player(speaker2)()
+                else
+                    sleep(0.05)
+                end
             end
         end
 
