@@ -64,7 +64,7 @@ return function(name)
         if slide.commands ~= nil and type(slide.commands) == "table" then
             for command, verification_hash in pairs(slide.commands) do
                 if command ~= nil and verification_hash ~= nil and type(command) == "string" and type(verification_hash) == "string" then
-                    local real_hash = b64.encode(to_string(hmac_lib.hmac(command, config.command_secret)))
+                    local real_hash = b64.encode(tostring(hmac_lib.hmac(command, config.command_secret)))
                     if real_hash == verification_hash then
                         slide.commands[#slide.commands+1] = command
                     else
