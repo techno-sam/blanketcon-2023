@@ -36,7 +36,7 @@ return {
         now_playing = 14
     },
     speakers = {
-        a = 1,
+        a = 3,
         b = 2
     }
 }
