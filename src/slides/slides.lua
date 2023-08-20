@@ -123,6 +123,9 @@ local backstage_buttons = {
     end },
     run_cmd = {x = 20, y = 6, text = "Run Command(s)", bg=colours.purple, touch = run_slide_cmd},
 }
+if not config.enable_commands then
+    backstage_buttons.run_cmd = nil
+end
 local backstage_width = backstage_monitors["monitor_"..config.monitors.backstage_a].getSize()
 
 local function dismiss_q(self)
@@ -240,9 +243,11 @@ local function tick()
 
     if run_cmd then
         run_cmd = false
-        for _, command in pairs(slide.commands) do
-            print("Running " .. command)
-            commands.execAsync(command)
+        if config.enable_commands then
+            for _, command in pairs(slide.commands) do
+                print("Running " .. command)
+                commands.execAsync(command)
+            end
         end
     end
 
@@ -252,9 +257,11 @@ local function tick()
         if colours.test(mask, colours.white) or colours.test(mask, colours.magenta) then go_next()
         elseif colours.test(mask, colours.lightBlue) or colours.test(mask, colours.orange) then go_prev()
         elseif colours.test(mask, colours.yellow) or colours.test(mask, colours.lime) then
-            for _, command in pairs(slide.commands) do
-                print("Running " .. command)
-                commands.execAsync(command)
+            if config.enable_commands then
+                for _, command in pairs(slide.commands) do
+                    print("Running " .. command)
+                    commands.execAsync(command)
+                end
             end
         elseif not colours.test(mask, colours.brown) then
             print("quitting slides")

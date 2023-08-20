@@ -16,7 +16,8 @@ if false then -- local testing
         speakers = {
             a = 1,
             b = 2
-        }
+        },
+        enable_commands = false
     }
 else
     return {
@@ -36,6 +37,7 @@ else
         speakers = {
             a = 3,
             b = 2
-        }
+        },
+        enable_commands = false
     }
 end
