@@ -148,14 +148,24 @@ while true do
             local r, g, b = colors.unpackRGB(packed)
             old_set_palette_color(c, r, g, b)
         end
-        local item_data = to_json(sound.art)
+        --[[local item_data = to_json(sound.art.tag)
         local regex_match_backslash = "\\\\" -- double escaped for regex and lua
         local regex_match_quote = "\\\"" -- double escaped for regex and lua
         item_data = string.gsub(item_data, regex_match_backslash..regex_match_quote, "<QUOTE>")
         item_data = string.gsub(item_data, regex_match_quote, "")
         item_data = string.gsub(item_data, "<QUOTE>", "\"")
-        print(item_data)
-        commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item", "set", "value", item_data) -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
+        print(item_data)--]]
+        commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item.id", "set", "value", sound.art.id) -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
+        if sound.art.tag ~= nil then
+            local item_data = to_json(sound.art.tag)
+            local regex_match_backslash = "\\\\" -- double escaped for regex and lua
+            local regex_match_quote = "\\\"" -- double escaped for regex and lua
+            item_data = string.gsub(item_data, regex_match_backslash..regex_match_quote, "<QUOTE>")
+            item_data = string.gsub(item_data, regex_match_quote, "")
+            item_data = string.gsub(item_data, "<QUOTE>", "\"")
+            print(item_data)
+            commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item.tag", "set", "value", item_data)
+        end
         --dofile("speaker/"..sound.art).draw(album_art)
 
         --[[local handle, err = http.get { url = sound.url, binary = true }
