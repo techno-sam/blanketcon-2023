@@ -1,8 +1,8 @@
 -- To install: `wget run https://raw.githubusercontent.com/techno-sam/blanketcon-2023/main/src/slides/installer.lua`
 -- check if commands are present
 if not (commands or pocket) then
-    printError("The slides system must be installed on a command computer, and a pocket computer")
-    goto exit
+    printError("The slides system must be installed on a command computer, and a pocket computer. Exiting.")
+    exit()
 end
 
 local fs_idx
@@ -17,8 +17,8 @@ if pocket then
     }
     local modem = peripheral.find("modem")
     if not modem then
-        printError("Pocket computer must be wireless to work")
-        goto exit
+        printError("Pocket computer must be wireless to work. Exiting.")
+        exit()
     end
 else
     fs_idx = {
