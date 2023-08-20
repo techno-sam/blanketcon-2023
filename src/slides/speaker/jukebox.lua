@@ -68,7 +68,8 @@ local sounds = {
         name = "Pigstep",
         artist = "Lena Raine",
         art = "art/celeste.lua", -- placeholder
-        sound_event = "music_disc.pigstep" -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
+        sound_event = "music_disc.pigstep", -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
+        duration = 2*60 + 28
     }
 }
 
@@ -90,6 +91,8 @@ end
 local album_art = peripheral.wrap("monitor_"..config.monitors.album_art)
 local now_playing = peripheral.wrap("monitor_"..config.monitors.now_playing)
 local speakers = {peripheral.find("speaker")}
+
+print("Found "..#speakers.." speakers")
 
 album_art.setTextScale(0.5)
 
@@ -158,18 +161,12 @@ while true do
             end
         end--]]
 
-        local function make_player(speak)
-            return function()
-                while not speak.playSound(sound.sound_event) do end
-            end
-        end
-
         if #speakers >= 1 then
             local players = {}
             for _, speaker in pairs(speakers) do
-                players[#players+1] = make_player(speaker)
+                speaker.playSound(sound.sound_event)
             end
-            parallel.waitForAny(unpack(players))
+            sleep(sound.duration)
         else
             sleep(0.05)
         end
