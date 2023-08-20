@@ -44,7 +44,7 @@ else
         "config.lua",
         "loader.lua",
         "questions.lua",
-        "slide-control.lua",
+        "reboot_watchdog.lua",
         "slides.lua"
     }
 end

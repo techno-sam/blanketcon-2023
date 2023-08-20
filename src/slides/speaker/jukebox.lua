@@ -132,13 +132,17 @@ while true do
 
                 local buffer = decoder(chunk)
                 local function make_player(speak)
-                    return function()
-                        while not speak.playAudio(buffer, sound.volum or 2) do
-                            os.pullEvent("speaker_audio_empty")
+                    if speak == nil then
+                        return function() end
+                    else
+                        return function()
+                            while not speak.playAudio(buffer, sound.volume or 2) do
+                                os.pullEvent("speaker_audio_empty")
+                            end
                         end
                     end
                 end
-                parallel.waitForAll(make_player(speaker), make_player(speaker2))
+                parallel.waitForAny(make_player(speaker), make_player(speaker2))
             end
         end
 

@@ -1,3 +1,5 @@
+local config = require "/config"
+
 print("Behold, my terrible wiring!")
 
 local function waitForPower()
@@ -6,10 +8,10 @@ local function waitForPower()
         if event == "redstone" then
             local mask = redstone.getBundledInput("left")
             if colours.test(mask, colours.brown) then
-                local speaker = peripheral.wrap("speaker_1")
-                local speaker2 = peripheral.wrap("speaker_2")
-                speaker.stop()
-                speaker2.stop()
+                local speaker = peripheral.wrap("speaker_"..config.speakers.a)
+                local speaker2 = peripheral.wrap("speaker_"..config.speakers.b)
+                if speaker ~= nil then speaker.stop() end
+                if speaker2 ~= nil then speaker2.stop() end
                 return true
             end
         end
@@ -17,9 +19,7 @@ local function waitForPower()
 end
 
 local function runBGM()
-    if not shell.run("/speaker/jukebox") then
-        crash()
-    end
+    shell.run("/speaker/jukebox")
 end
 
 local function clearAllMonitors()
@@ -37,6 +37,8 @@ else
     term.setTextColour(colours.green)
     print("Automatic slide management system")
     term.setTextColour(colours.white)
+    
+    shell.run("bg /reboot_watchdog")
 
     --os.queueEvent("paste", "/slides https://imgur.com/a/38KMRGa")
     while true do
