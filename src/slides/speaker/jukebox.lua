@@ -223,7 +223,10 @@ while true do
             sleep(0.05)
         end--]]
         local x1, y1, z1 = config.jukebox_input_pos.x, config.jukebox_input_pos.y, config.jukebox_input_pos.z
+        sound.art.Count = 1
         local ser, _ = string.gsub(textutils.serializeJSON(sound.art), '"Count"\s*:\s*1', '"Count":1b') -- yes this is really correct
+        print("Inserting:")
+        print(ser)
         commands.async.data.modify("block", x1, y1, z1, "Items", "append", "value", ser)
         sleep(sound.duration)
 
