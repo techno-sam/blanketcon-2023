@@ -66,12 +66,12 @@ return function(name)
                 if command ~= nil and verification_hash ~= nil and type(command) == "string" and type(verification_hash) == "string" then
                     local real_hash = b64.encode(tostring(hmac_lib.hmac(command, config.command_secret)))
                     if real_hash == verification_hash then
-                        slide.commands[#slide.commands+1] = command
+                        commands[#commands+1] = command
                     else
                         print("Unverified command: `"..command.."`, discarding")
                     end
                 else
-                    print("Unverified command: `"..command.."`, discarding")
+                    print("Unverified command: `"..(type(command)=="string" and command or verification_hash).."`, discarding")
                 end
             end
         end
