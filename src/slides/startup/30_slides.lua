@@ -12,6 +12,8 @@ local function waitForPower()
                 local speaker2 = peripheral.wrap("speaker_"..config.speakers.b)
                 if speaker ~= nil then speaker.stop() end
                 if speaker2 ~= nil then speaker2.stop() end
+                local speaker_find = peripheral.find("speaker")
+                if speaker_find ~= nil then speaker_find.stop() end
                 return true
             end
         end
