@@ -1,6 +1,6 @@
 local config = require "/config"
 
-local sounds = {
+--[[local sounds = {
     {
         name   = "Joy of Remembrance",
         artist = "Lena Raine",
@@ -61,6 +61,15 @@ local sounds = {
         art    = "art/megalo.lua",
         url    = "https://squiddev.cc/r/sound/megalo-sachio.dfpwm",
     },
+}--]]
+
+local sounds = {
+    {
+        name = "Pigstep",
+        artist = "Lena Raine",
+        art = "art/celeste.lua", -- placeholder
+        sound_event = "music_disc.pigstep" -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
+    }
 }
 
 if ... == "viewer" then
@@ -120,7 +129,7 @@ while true do
         end
         dofile("speaker/"..sound.art).draw(album_art)
 
-        local handle, err = http.get { url = sound.url, binary = true }
+        --[[local handle, err = http.get { url = sound.url, binary = true }
         if not handle then
             printError(err)
         else
@@ -147,6 +156,22 @@ while true do
                     sleep(0.05)
                 end
             end
+        end--]]
+
+        local function make_player(speak)
+            return function()
+                while not speak.playSound(sound.sound_event) do end
+            end
+        end
+
+        if #speakers >= 1 then
+            local players = {}
+            for _, speaker in pairs(speakers) do
+                players[#players+1] = make_player(speaker)
+            end
+            parallel.waitForAny(unpack(players))
+        else
+            sleep(0.05)
         end
 
         local deadline = os.epoch("utc") + 10 * 1000

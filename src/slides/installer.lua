@@ -32,7 +32,7 @@ else
         startup = {
             "30_slides.lua"
         },
-        --[[speaker = {
+        speaker = {
             art = {
                 "alcaknight.lua",
                 "bossa-nova-4.lua",
@@ -46,7 +46,7 @@ else
                 "yuru.lua"
             },
             "jukebox.lua"
-        },]]
+        },
         "button.lua",
         "config.lua",
         "loader.lua",

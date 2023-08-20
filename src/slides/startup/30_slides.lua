@@ -6,13 +6,16 @@ local function waitForPower()
         if event == "redstone" then
             local mask = redstone.getBundledInput("left")
             if colours.test(mask, colours.brown) then
-                local speakers = {peripheral.find("speaker")}
-                for _, speaker in pairs(speakers) do
-                    speaker.stop()
-                end
                 return true
             end
         end
+    end
+end
+
+local function stopSpeakers()
+    local speakers = {peripheral.find("speaker")}
+    for _, speaker in pairs(speakers) do
+        speaker.stop()
     end
 end
 
@@ -77,8 +80,9 @@ else
         else
             print("Running BGM")
             clearAllMonitors()
-            waitForPower()
---            parallel.waitForAny(waitForPower, runBGM) -- disable bgm for now (going to use jukebox system instead)
+            --waitForPower()
+            parallel.waitForAny(waitForPower, runBGM) -- disable bgm for now (going to use jukebox system instead)
+            pcall(stopSpeakers)
         end
     end
 
