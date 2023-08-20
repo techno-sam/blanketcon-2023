@@ -45,8 +45,10 @@ if pocket then
     shell.run("/slide-control")
 else
     redstone.setBundledOutput("left", colours.brown)
-    sleep(0.05)
+    sleep(0.1)
     redstone.setBundledOutput("left", 0)
+    print("Sleeping 2 seconds...")
+    sleep(2)
     term.setTextColour(colours.green)
     print("Automatic slide management system")
     term.setTextColour(colours.white)
