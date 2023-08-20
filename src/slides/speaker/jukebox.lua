@@ -86,6 +86,31 @@ local sounds = {
         duration = 3*60 + 39
     }
 }
+
+-- get sounds from disc chest
+local x, y, z = config.spindle_discs.x, config.spindle_discs.y, config.spindle_discs.z
+local info = commands.getBlockInfo(x, y, z)
+for slot, item in pairs(info.nbt.Items) do
+    if item.id == "spindlemark:disc" and item.tag and item.tag.SongLength and item.tag.Description and item.tag.CustomMusicDiscSound then
+        local song = {
+            name = item.tag.Description,
+            artist = "",
+            art = item,
+            sound_event = item.tag.CustomMusicDiscSound,
+            duration = tonumber(item.tag.SongLength)
+        }
+        local dash_idx, _ = string.find(item.tag.Description, '-')
+        if dash_idx then
+            song.name = string.sub(item.tag.Description, 1, dash_idx)
+            song.artist = string.sub(item.tag.Description, dash_idx)
+            print()
+            print(song.name)
+            print(song.artist)
+        end
+        sounds[#sounds+1] = song
+    end
+end
+
 --[[
 if ... == "viewer" then
     local i = 1
@@ -155,7 +180,7 @@ while true do
         item_data = string.gsub(item_data, regex_match_quote, "")
         item_data = string.gsub(item_data, "<QUOTE>", "\"")
         print(item_data)--]]
-        commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item.id", "set", "value", sound.art.id) -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
+        commands.async.data.modify("entity", "@e[tag=stage_disc_display,limit=1]", "item.id", "set", "value", "\""..sound.art.id.."\"") -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
         if sound.art.tag ~= nil then
             local item_data = to_json(sound.art.tag)
             local regex_match_backslash = "\\\\" -- double escaped for regex and lua
