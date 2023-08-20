@@ -3,24 +3,36 @@
         "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_1.png",
         "width": 208,
         "height": 147,
-        "desc": "Epic slide 1"
+        "desc": "Epic slide 1",
+        "commands": {
+            "/tellraw @a[distance=0..50] \"[Slides system] This is a testing message\"": "NxfuLdTR5c4rMh4KIu78ZcDsW/E="
+        }
     },
     {
         "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_2.png",
         "width": 410,
         "height": 121,
-        "desc": "Awesome slide 2"
+        "desc": "Awesome slide 2",
+        "commands": {
+            "/tellraw @a[distance=0..50] \"[Slides system] This is a testing message (wrong HMAC)\"": "NxfuLdTR5c4rMh4KIu78ZcDsW/E="
+        }
     },
     {
         "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_3.png",
         "width": 150,
         "height": 343,
-        "desc": "1337 slide 3"
+        "desc": "1337 slide 3",
+        "commands": [
+            "/tellraw @a[distance=0..50] \"[Slides system] This is a testing message (no HMAC)\""
+        ]
     },
     {
         "url": "https://blanketcon.b-cdn.net/pub/23/8219_demo_slide_4.png",
         "width": 258,
         "height": 229,
-        "desc": "Fantastic slide 4"
+        "desc": "Fantastic slide 4",
+        "commands": {
+            "/tellraw @a[distance=0..50] \"[Slides system] This is another correct testing message\"": "fnr8z3SSAYQ8qUUHc7rezfh3GQM="
+        }
     }
 ]

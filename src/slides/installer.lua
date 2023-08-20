@@ -53,7 +53,9 @@ else
         "questions.lua",
         "reboot_watchdog.lua",
         "slides.lua",
-        "installer.lua"
+        "installer.lua",
+        "hmac_lib.lua",
+        "b64_lib.lua"
     }
 end
 

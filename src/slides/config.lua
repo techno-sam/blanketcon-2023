@@ -17,7 +17,8 @@ if false then -- local testing
             a = 1,
             b = 2
         },
-        enable_commands = false
+        enable_commands = true,
+        command_secret = "totally_secret" -- DO NOT LEAK THIS, used for verifying commands
     }
 else
     return {
@@ -38,6 +39,7 @@ else
             a = 3,
             b = 2
         },
-        enable_commands = false
+        enable_commands = true,
+        command_secret = "totally_secret" -- DO NOT LEAK THIS, used for verifying commands
     }
 end
