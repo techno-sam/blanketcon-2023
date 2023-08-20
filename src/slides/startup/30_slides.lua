@@ -26,6 +26,9 @@ local function runBGM()
     end
     if not pcall(inner) then
         print("Error running BGM, sleeping for 5 seconds")
+        redstone.setBundledOutput("left", colours.red)
+        sleep(0.05)
+        redstone.setBundledOutput("left", 0)
         sleep(5)
     end
 end
@@ -65,8 +68,11 @@ else
                 local success, results = pcall(inner)
                 if not success or not results then
                     print("Error during slideshow, rebooting after 5 seconds")
-                    for i = 5, 0 do
-                        print(""..i.."...")
+                    redstone.setBundledOutput("left", colours.red)
+                    sleep(0.05)
+                    redstone.setBundledOutput("left", 0)
+                    for i = 0, 5 do
+                        print(""..(5-i).."...")
                         sleep(1)
                     end
                     break
