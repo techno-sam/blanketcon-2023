@@ -58,7 +58,7 @@ end
 
 return function(name)
     local loaded = stage1(name) or {}
-    -- command verification
+    -- command verification and image mode processing: PS for static image, LS for looping video, VS for non-looping video
     for _, slide in ipairs(loaded) do
         local commands = {}
         if slide.commands ~= nil and type(slide.commands) == "table" then
@@ -76,6 +76,18 @@ return function(name)
             end
         end
         slide.commands = commands
+
+        local mode = "PS"
+
+        if slide.is_video or string.sub(slide.url, slide.url:len()-3) == "ogv" then
+            mode = "VS"
+
+            if slide.looping then
+                mode = "LS"
+            end
+        end
+
+        slide.sign_mode = mode
     end
 
     return loaded

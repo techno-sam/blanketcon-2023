@@ -34,5 +34,25 @@
         "commands": {
             "/tellraw @a \"[Slides system] This is another correct testing message\"": "r7gIZA26qkHVIvwpk4dNUjqUykU="
         }
+    },
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/4226_ads_1.ogv",
+        "width": 600,
+        "height": 900,
+        "desc": "Video test"
+    },
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/4226_ads_1.ogv",
+        "width": 600,
+        "height": 900,
+        "desc": "Looping Video test",
+        "looping": true
+    },
+    {
+        "url": "https://blanketcon.b-cdn.net/pub/23/4226_ads_1.weird_extension",
+        "width": 600,
+        "height": 900,
+        "desc": "Weird extension Video test",
+        "is_video": true
     }
 ]
