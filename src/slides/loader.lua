@@ -79,7 +79,7 @@ return function(name)
 
         local mode = "PS"
 
-        if slide.is_video or string.sub(slide.url, slide.url:len()-3) == "ogv" then
+        if slide.is_video or string.sub(slide.url, slide.url:len()-2) == "ogv" then
             mode = "VS"
 
             if slide.looping then
