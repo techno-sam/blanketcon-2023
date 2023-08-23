@@ -150,6 +150,11 @@ while true do
     until sounds[1] ~= last or #sounds == 1
 
     for _, sound in pairs(sounds) do
+        redstone.setBundledOutput("left", colours.brown)
+        sleep(0.1)
+        redstone.setBundledOutput("left", 0)
+        print("Sleeping 1 second before playing...")
+        sleep(1)
         print("Playing " .. sound.name)
 
         -- Display now playing
@@ -229,7 +234,11 @@ while true do
         print("Inserting:")
         print(ser)
         commands.async.data.modify("block", x1, y1, z1, "Items", "append", "value", ser)
-        sleep(sound.duration)
+        -- delay for song playing (duration is in ticks)
+        local deadline1 = os.epoch("utc") + (sound.duration/20) * 1000
+        repeat sleep(1) until os.epoch("utc") >= deadline1
+        --sleep(sound.duration/20) -- duration is in ticks
+        print("Waiting 10 seconds for cooldown")
 
         local deadline = os.epoch("utc") + 10 * 1000
         repeat sleep(1) until os.epoch("utc") >= deadline
