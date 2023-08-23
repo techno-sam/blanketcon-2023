@@ -150,11 +150,6 @@ while true do
     until sounds[1] ~= last or #sounds == 1
 
     for _, sound in pairs(sounds) do
-        redstone.setBundledOutput("left", colours.yellow)
-        sleep(0.1)
-        redstone.setBundledOutput("left", 0)
-        print("Sleeping 1 second before playing...")
-        sleep(1)
         print("Playing " .. sound.name)
 
         -- Display now playing
@@ -242,5 +237,10 @@ while true do
 
         local deadline = os.epoch("utc") + 10 * 1000
         repeat sleep(1) until os.epoch("utc") >= deadline
+        redstone.setBundledOutput("left", colours.yellow)
+        sleep(0.1)
+        redstone.setBundledOutput("left", 0)
+        print("Sleeping 1 second before playing again...")
+        sleep(1)
     end
 end
