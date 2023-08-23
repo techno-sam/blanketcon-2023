@@ -150,7 +150,7 @@ while true do
     until sounds[1] ~= last or #sounds == 1
 
     for _, sound in pairs(sounds) do
-        redstone.setBundledOutput("left", colours.brown)
+        redstone.setBundledOutput("left", colours.yellow)
         sleep(0.1)
         redstone.setBundledOutput("left", 0)
         print("Sleeping 1 second before playing...")
