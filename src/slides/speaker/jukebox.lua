@@ -69,21 +69,21 @@ local sounds = {
         artist = "Lena Raine",
         art = {id="minecraft:music_disc_pigstep", Count=1}, -- placeholder
         sound_event = "music_disc.pigstep", -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
-        duration = 2*60 + 28 -- https://minecraft.fandom.com/wiki/Music_Disc#Discs
+        duration = (2*60 + 28)*20 -- https://minecraft.fandom.com/wiki/Music_Disc#Discs
     },
     {
         name = "Otherside",
         artist = "Lena Raine",
         art = {id="minecraft:music_disc_otherside", Count=1},
         sound_event = "music_disc.otherside", -- https://minecraft.fandom.com/wiki/Sounds.json#Sound_events
-        duration = 3*60 + 15 -- https://minecraft.fandom.com/wiki/Music_Disc#Discs
+        duration = (3*60 + 15)*20 -- https://minecraft.fandom.com/wiki/Music_Disc#Discs
     },
     {
         name = "Papillons",
         artist = "xyce & malmen",
         art = {id="yttr:music_disc_papillons", Count=1}, -- /data modify entity @e[tag=stage_disc_display,limit=1] item set value {id:"minecraft:music_disc_pigstep", Count:1b}
         sound_event = "yttr:papillons",
-        duration = 3*60 + 39
+        duration = (3*60 + 39)*20
     }
 }
 
@@ -139,6 +139,8 @@ local function to_json(tbl)
     return ("%q"):format(textutils.serializeJSON(tbl))
 end
 
+print("Delay to ensure jukebox availability")
+sleep(1)
 while true do
     -- Lazy shuffle here so we don't play the same songs in order.
     local last = sounds[#sounds]
