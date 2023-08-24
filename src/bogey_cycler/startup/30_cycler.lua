@@ -32,8 +32,9 @@ print("Cycling through bogeys!")
 while true do
     for block_name, styles in pairs(bogeys) do
         for _, style in ipairs(styles) do
-            commands.setblock(x, y, z, block_name.."[axis=z,waterlogged=false]{BogeyData:{BogeyStyle:\""..style.."\"}} destroy")
-            sleep(1)
+            commands.setblock(x, y, z, "air")
+            commands.setblock(x, y, z, block_name.."[axis=z,waterlogged=false]{BogeyData:{BogeyStyle:\""..style.."\"}}")
+            sleep(2)
         end
     end
 end
