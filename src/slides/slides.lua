@@ -32,7 +32,7 @@ local function create_display(
         end
 
         commands.async.data.modify("block", x, y, z, "front_text.messages[0]", "set", "value", to_json {
-            text = ("!%s:%s"):format(image.sign_mode, image.url)
+            text = ("!%s:%s"):format(image.sign_mode or "PS", image.url)
         })
 
         local width, height = image.width, image.height
