@@ -87,6 +87,10 @@ local sounds = {
     }
 }
 
+if not config.include_hardcoded_songs then
+    sounds = {}
+end
+
 -- get sounds from disc chest
 local x, y, z = config.spindle_discs_pos.x, config.spindle_discs_pos.y, config.spindle_discs_pos.z
 local info = commands.getBlockInfo(x, y, z)

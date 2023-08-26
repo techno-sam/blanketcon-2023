@@ -16,7 +16,8 @@ if false then -- local testing
         enable_commands = false,
         command_secret = "totally_secret", -- DO NOT LEAK THIS, used for verifying commands
         spindle_discs_pos = {x=-449, y=72, z=393},
-        jukebox_pos = {x=-456, y=68, z=393}
+        jukebox_pos = {x=-456, y=68, z=393},
+        include_hardcoded_songs = false
     }
 else
     return {
@@ -36,6 +37,7 @@ else
         enable_commands = false,
         command_secret = "totally_secret", -- DO NOT LEAK THIS, used for verifying commands
         spindle_discs_pos = {x=-449, y=72, z=393},
-        jukebox_input_pos = {x=-456, y=68, z=393}
+        jukebox_input_pos = {x=-456, y=68, z=393},
+        include_hardcoded_songs = false
     }
 end
