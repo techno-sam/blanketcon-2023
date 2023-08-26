@@ -102,7 +102,7 @@ local function go_prev() if image > 1 then image = image - 1 dirty = true end en
 local function run_slide_cmd() run_cmd = true end
 
 local display_monitor = peripheral.wrap("monitor_"..config.monitors.display)
-display_monitor.setTextScale(5)
+display_monitor.setTextScale(3)
 
 local display_width = display_monitor.getSize()
 
