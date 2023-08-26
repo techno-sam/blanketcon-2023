@@ -32,28 +32,43 @@ local function poll_dirty()
     return true
 end
 
-local function run()
+local function importQuestion(slot, item)
+    if item.id == "minecraft:writable_book" and item.tag and item.tag.pages then
+        local pages = {}
+        for i = 0, #item.tag.pages do pages[i + 1] = item.tag.pages[i] end
+        add_question(pages, "Anonymous")
+    elseif item.id == "minecraft:written_book" and item.tag and item.tag.pages then
+        local pages = {}
+        for i = 0, #item.tag.pages do
+            local page = item.tag.pages[i]
+            pages[i + 1] = textutils.unserialiseJSON(page).text
+        end
+
+        add_question(pages, item.tag.author)
+    end
+end
+
+local function runInner()
     while true do
         local info = commands.getBlockInfo(x, y, z)
         for slot, item in pairs(info.nbt.Items) do
-            if item.id == "minecraft:writable_book" and item.tag and item.tag.pages then
-                local pages = {}
-                for i = 0, #item.tag.pages do pages[i + 1] = item.tag.pages[i] end
-                add_question(pages, "Anonymous")
-            elseif item.id == "minecraft:written_book" and item.tag and item.tag.pages then
-                local pages = {}
-                for i = 0, #item.tag.pages do
-                    local page = item.tag.pages[i]
-                    pages[i + 1] = textutils.unserialiseJSON(page).text
-                end
-
-                add_question(pages, item.tag.author)
+            local function imp() -- curried form of importQuestion, just to wrap in pcall to catch any exceptions
+                return importQuestion(slot, item)
             end
+            pcall(imp) -- added for safety
 
             commands.async.data.remove.block(x, y, z, "Items[" .. slot .. "]")
         end
 
         sleep(1)
+    end
+end
+
+local function run()
+    while true do
+        pcall(runInner)
+        print("There was an error in runInner. That's all we know. Waiting 5 seconds to restart question handler...")
+        sleep(5)
     end
 end
 
