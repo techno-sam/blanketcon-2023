@@ -1,3 +1,4 @@
+-- FIXME: Higher-quality hash for next year :)
 -- SHA1 hash function in ComputerCraft (Unsafe, for educational/legacy uses only)
 -- By Anavrins
 -- For help and details, you can DM me on Discord (Anavrins#4600)
