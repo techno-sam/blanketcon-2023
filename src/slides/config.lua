@@ -15,6 +15,8 @@ if false then -- local testing
         },
         enable_commands = false,
         command_secret = "totally_secret", -- DO NOT LEAK THIS, used for verifying commands
+        --  (obviously this should be changed when put into production use, and if you're here
+        --   from the CTF video, it was changed on BC23)
         spindle_discs_pos = {x=-449, y=72, z=393},
         jukebox_pos = {x=-456, y=68, z=393},
         include_hardcoded_songs = false
@@ -36,6 +38,8 @@ else
         },
         enable_commands = false,
         command_secret = "totally_secret", -- DO NOT LEAK THIS, used for verifying commands
+        --  (obviously this should be changed when put into production use, and if you're here
+        --   from the CTF video, it was changed on BC23)
         spindle_discs_pos = {x=-449, y=72, z=393},
         jukebox_input_pos = {x=-456, y=68, z=393},
         include_hardcoded_songs = false
